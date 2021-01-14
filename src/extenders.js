@@ -136,6 +136,7 @@ ko.extenders['validatable'] = function (observable, options) {
  */
 ko.extenders['boundElement'] = function (observable, element) {
 	observable.boundElement = element;
+	return observable;
 };
 
 function validateSync(observable, rule, ctx) {
