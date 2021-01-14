@@ -1,6 +1,6 @@
 {
-  "name": "knockout.validation",
-  "version": "2.0.4",
+  "name": "ko-validation",
+  "version": "2.0.5",
   "description": "A KnockoutJS Plugin for model and property validation",
   "main": "dist/knockout.validation.js",
   "files": [
@@ -29,11 +29,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Knockout-Contrib/Knockout-Validation.git"
+    "url": "https://github.com/pafnuty/ko-validation.git"
   },
   "author": "@ericmbarnard",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Knockout-Contrib/Knockout-Validation/issues"
+    "url": "https://github.com/pafnuty/ko-validation/issues"
   }
 }
