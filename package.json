@@ -1,6 +1,6 @@
 {
-  "name": "@pafnuty/ko.validation",
-  "version": "2.0.7",
+  "name": "knockout-validation-with-features",
+  "version": "2.0.8",
   "description": "A KnockoutJS Plugin for model and property validation",
   "main": "dist/knockout.validation.js",
   "files": [

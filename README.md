@@ -1,7 +1,7 @@
 # Knockout Validation
 A fork of KnockoutJS Plugin for model and property validation with one new option: `hideErrorMessageOnFocus`
 
-[![npm version](https://badge.fury.io/js/knockout.validation.svg)](http://badge.fury.io/js/knockout.validation)
+[![npm version](https://badge.fury.io/js/knockout-validation-with-features.svg)](http://badge.fury.io/js/knockout-validation-with-features)
 
 Contributors:
 
@@ -20,7 +20,7 @@ License: [MIT](http://www.opensource.org/licenses/mit-license.php)
 #### NPM
 
 ```sh
-npm install knockout.validation --save
+npm install knockout-validation-with-features --save
 ```
 
 ## Getting Started
