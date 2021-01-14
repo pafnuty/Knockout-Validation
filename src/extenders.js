@@ -126,6 +126,19 @@ ko.extenders['validatable'] = function (observable, options) {
 	return observable;
 };
 
+/**
+ * This is the extender that adds a Dom Node element which is bound to this observable
+ *
+ * example ko.observable('something').extend({ boundElement: element });
+ *
+ * @param observable
+ * @param element - Dom element
+ */
+ko.extenders['boundElement'] = function (observable, element) {
+	observable.boundElement = element;
+	return observable;
+};
+
 function validateSync(observable, rule, ctx) {
 	//Execute the validator and see if its valid
 	if (!rule.validator(observable(), (ctx.params === undefined ? true : ko.utils.unwrapObservable(ctx.params)))) { // default param is true, eg. required = true

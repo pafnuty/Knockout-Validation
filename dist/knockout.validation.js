@@ -59,7 +59,8 @@ var defaults = {
 	},
 	validate: {
 		// throttle: 10
-	}
+	},
+	hideErrorMessageOnFocus: false // hides error message if current input is focused
 };
 
 // make a copy  so we can use 'reset' later
@@ -1015,17 +1016,29 @@ ko.bindingHandlers['validationCore'] = (function () {
 				kv.utils.async(function () { kv.parseInputValidationAttributes(element, valueAccessor); });
 			}
 
-			// if requested insert message element and apply bindings
-			if (config.insertMessages && kv.utils.isValidatable(observable)) {
+			if (kv.utils.isValidatable(observable)) {
+				if (config.hideErrorMessageOnFocus) {
+					observable.extend({ boundElement: element });
+					koUtils.registerEventHandler(element, "focus", function() {
+						observable.clearError();
+					});
+					koUtils.registerEventHandler(element, "blur",  function() {
+						if (observable.isModified()) {
+							observable.valueHasMutated();
+						}
+						kv.validateObservable(observable);
+					});
+				}
+				if (config.insertMessages) {
+					// insert the <span></span>
+					var validationMessageElement = kv.insertValidationMessage(element);
 
-				// insert the <span></span>
-				var validationMessageElement = kv.insertValidationMessage(element);
-
-				// if we're told to use a template, make sure that gets rendered
-				if (config.messageTemplate) {
-					ko.renderTemplate(config.messageTemplate, { field: observable }, null, validationMessageElement, 'replaceNode');
-				} else {
-					ko.applyBindingsToNode(validationMessageElement, { validationMessage: observable });
+					// if we're told to use a template, make sure that gets rendered
+					if (config.messageTemplate) {
+						ko.renderTemplate(config.messageTemplate, { field: observable }, null, validationMessageElement, 'replaceNode');
+					} else {
+						ko.applyBindingsToNode(validationMessageElement, { validationMessage: observable });
+					}
 				}
 			}
 
@@ -1087,7 +1100,13 @@ ko.bindingHandlers['validationMessage'] = { // individual error message, if modi
 		if (isCurrentlyVisible && !isVisible) {
 			element.style.display = 'none';
 		} else if (!isCurrentlyVisible && isVisible) {
-			element.style.display = '';
+			if (config.hideErrorMessageOnFocus) {
+				if (element.ownerDocument.activeElement !== obsv.boundElement) {
+					element.style.display = '';
+				}
+			} else {
+				element.style.display = '';
+			}
 		}
 	}
 };
@@ -1287,6 +1306,19 @@ ko.extenders['validatable'] = function (observable, options) {
 	} else if (options.enable === false && observable._disposeValidation) {
 		observable._disposeValidation();
 	}
+	return observable;
+};
+
+/**
+ * This is the extender that adds a Dom Node element which is bound to this observable
+ *
+ * example ko.observable('something').extend({ boundElement: element });
+ *
+ * @param observable
+ * @param element - Dom element
+ */
+ko.extenders['boundElement'] = function (observable, element) {
+	observable.boundElement = element;
 	return observable;
 };
 

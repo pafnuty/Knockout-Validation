@@ -22,7 +22,8 @@ var defaults = {
 	},
 	validate: {
 		// throttle: 10
-	}
+	},
+	hideErrorMessageOnFocus: false // hides error message if current input is focused
 };
 
 // make a copy  so we can use 'reset' later
