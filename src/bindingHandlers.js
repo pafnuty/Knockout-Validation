@@ -13,17 +13,29 @@ ko.bindingHandlers['validationCore'] = (function () {
 				ko.validation.utils.async(function () { ko.validation.parseInputValidationAttributes(element, valueAccessor); });
 			}
 
-			// if requested insert message element and apply bindings
-			if (config.insertMessages && ko.validation.utils.isValidatable(observable)) {
+			if (ko.validation.utils.isValidatable(observable)) {
+				if (config.hideErrorMessageOnFocus) {
+					observable.extend({ boundElement: element });
+					ko.utils.registerEventHandler(element, "focus", function() {
+						observable.clearError();
+					});
+					ko.utils.registerEventHandler(element, "blur",  function() {
+						if (observable.isModified()) {
+							observable.valueHasMutated();
+						}
+						ko.validation.validateObservable(observable);
+					});
+				}
+				if (config.insertMessages) {
+					// insert the <span></span>
+					var validationMessageElement = ko.validation.insertValidationMessage(element);
 
-				// insert the <span></span>
-				var validationMessageElement = ko.validation.insertValidationMessage(element);
-
-				// if we're told to use a template, make sure that gets rendered
-				if (config.messageTemplate) {
-					ko.renderTemplate(config.messageTemplate, { field: observable }, null, validationMessageElement, 'replaceNode');
-				} else {
-					ko.applyBindingsToNode(validationMessageElement, { validationMessage: observable });
+					// if we're told to use a template, make sure that gets rendered
+					if (config.messageTemplate) {
+						ko.renderTemplate(config.messageTemplate, { field: observable }, null, validationMessageElement, 'replaceNode');
+					} else {
+						ko.applyBindingsToNode(validationMessageElement, { validationMessage: observable });
+					}
 				}
 			}
 
@@ -85,7 +97,13 @@ ko.bindingHandlers['validationMessage'] = { // individual error message, if modi
 		if (isCurrentlyVisible && !isVisible) {
 			element.style.display = 'none';
 		} else if (!isCurrentlyVisible && isVisible) {
-			element.style.display = '';
+			if (config.hideErrorMessageOnFocus) {
+				if (element.ownerDocument.activeElement !== obsv.boundElement) {
+					element.style.display = '';
+				}
+			} else {
+				element.style.display = '';
+			}
 		}
 	}
 };
