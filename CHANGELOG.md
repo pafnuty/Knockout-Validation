@@ -1,3 +1,6 @@
+# 2.0.5 (2020-01-14)
+- Add `hideErrorMessageOnFocus` option to hide error message if current input is focused.
+
 # 2.0.4 (2019-10-09)
 
 * fix isEmptyVal doesn't always return a boolean [#617](https://github.com/Knockout-Contrib/Knockout-Validation/issues/617)
